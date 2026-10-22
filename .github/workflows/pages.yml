@@ -8,11 +8,9 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+# Keep the build job read-only; deployment receives its own scoped token below.
 permissions:
   contents: read
-  pages: write
-  id-token: write
 # Allow one concurrent deployment
 concurrency:
   group: "pages"
@@ -45,6 +43,9 @@ jobs:
           path: ./website/dist
 
   deploy:
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
