@@ -2,18 +2,22 @@ name: Validate with hassfest
 
 on:
   push:
-    branches: [develop, master]
-  pull_request:
+    branches:
+      - "**"
+      - "!dependabot/**"
   schedule:
     - cron: "0 0 * * *"
 
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  cancel-in-progress: true
 
 jobs:
   validate:
-    runs-on: "ubuntu-latest"
+    runs-on: [self-hosted, linux, x64, repo-better-thermostat]
     # Worst-case pre-pull budget: 3 attempts * 2 min + 2 * 15 s wait = ~6.5 min,
     # leaving ~8.5 min for hassfest itself.
     timeout-minutes: 15

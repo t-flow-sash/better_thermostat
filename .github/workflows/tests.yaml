@@ -2,18 +2,22 @@ name: Tests
 
 on:
   push:
-    branches: [develop, master]
-  pull_request:
+    branches:
+      - "**"
+      - "!dependabot/**"
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  cancel-in-progress: true
 
 jobs:
   test:
     name: Run tests
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64, repo-better-thermostat]
     timeout-minutes: 15
     strategy:
       matrix:
