@@ -2,19 +2,19 @@ name: Lint
 
 on:
   push:
-    branches: [develop, master]
-  pull_request:
+    branches:
+      - "**"
+      - "!dependabot/**"
+
+permissions:
+  contents: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  cancel-in-progress: true
 
 jobs:
   ruff:
-    if: >-
-      github.event_name != 'pull_request' ||
-      (github.actor == github.repository_owner &&
-      github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: [self-hosted, linux, x64, repo-better-thermostat]
     timeout-minutes: 5
     steps:
